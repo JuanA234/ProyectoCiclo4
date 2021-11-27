@@ -3,15 +3,16 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 
+
 import HomePage from "./components/home/HomePage";
 
 import NavbarComponent from "./components/shared/navbar/NavbarComponent";
 
 import Usuarios from "./components/usuarios/Usuarios";
 import Avances from "./components/avances/Avances";
-import Proyectos from "./components/proyectos/Proyectos";
-import Incripciones from "./components/inscripciones/Inscripciones";
+import Proyectos from "components/proyectos/Proyectos";
 import Inscripciones from "./components/inscripciones/Inscripciones";
+
 
 function App() {
 
@@ -37,7 +38,7 @@ function App() {
         <Switch>
           <Route path="/proyectos" exact>
             <br />
-            <Proyectos />
+              <Proyectos />
             <br />
           </Route>
         </Switch>
