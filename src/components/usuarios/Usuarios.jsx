@@ -5,24 +5,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-import {GET_USERS } from "../../graphql/Queries.js";
-import {CREATE_USERS2} from "../../graphql/Mutation.js";
 import { useQuery, useMutation } from "@apollo/react-hooks";
+import { GET_USERS } from "../../graphql/Queries.js";
+import { CREATE_USERS } from "../../graphql/Mutation.js";
+import { DELETE_USERS } from "../../graphql/Mutation.js";
 
-/*
-const datos = [
-  { id: 1, personaje: "Naruto", anime: "Naruto" },
-  { id: 2, personaje: "Goku", anime: "Dragon Ball" },
-  { id: 3, personaje: "Kenshin Himura", anime: "Rurouni Kenshin" },
-  { id: 4, personaje: "Monkey D. Luffy", anime: "One Piece" },
-  {
-    id: 5,
-    personaje: "Edward Elric",
-    anime: "Fullmetal Alchemist: Brotherhood",
-  },
-  { id: 6, personaje: "Seto Kaiba", anime: "Yu-Gi-Oh!" },
-];
-*/
+
+
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -35,14 +24,42 @@ function Usuarios() {
   const [estado, setEstado] = useState();
   const [canDatos, setCanDatos] = useState();
 
+
+
+
   //Parte Graphql
 
   //const { loading, error, data } = useQuery(GET_CHARACTERS);
   const { loading, error, data } = useQuery(GET_USERS);
   loading ? console.log("cargando") : console.log(data.usuarios);
 
-  const [createUser, { data:dataCrearUsuario,error:errorCrearUsario,loading:loadingCrearUsuario }] = useMutation(CREATE_USERS2);
-  
+  const [
+    createUser,
+    {
+      data: dataCrearUsuario,
+      error: errorCrearUsario,
+      loading: loadingCrearUsuario,
+    },
+  ] = useMutation(CREATE_USERS);
+
+  const [
+    deleteUser,
+    {
+      data: dataDeleteUsuario,
+      error: errorDeleteUsario,
+      loading: loadingDeleterUsuario,
+    },
+  ] = useMutation(DELETE_USERS);
+
+
+  /*--------------------------------*/
+
+
+  useEffect(()=> {
+    console.log("Datos cambiaron",dataDeleteUsuario);
+    },[dataDeleteUsuario]);
+    
+    
 
   const infoInicial = "Usarios Almacenados en el sistema";
 
@@ -73,8 +90,16 @@ function Usuarios() {
                   <td>{datos.rol}</td>
                   <td>{datos.estado}</td>
                   <td>
-                    <Button color="primary">Editar</Button>{" "}
-                    <Button color="danger">Eliminar</Button>
+                    <Button color="primary" onClick={() => handlerEditarUser()}>
+                      Editar
+                    </Button>{" "}
+                    <Button
+                      key={datos.nombre}
+                      color="danger"
+                      onClick={() => handlerEliminarUser(datos.nombre)}
+                    >
+                      Eliminar
+                    </Button>{" "}
                   </td>
                 </tr>
               ))}
@@ -82,8 +107,14 @@ function Usuarios() {
         </Table>
 
         <Button color="danger" onClick={() => handlerInsertarUsuario()}>
-          Agregar Nuevo Usuario{" "}
+          Agregar Nuevo Usuario
+        </Button>{" "}
+
+        <Button color="danger" onClick={()=> handlerActualizarPage()}>
+          Actualizar
         </Button>
+
+
       </Container>
 
       <Modal isOpen={varShow}>
@@ -170,6 +201,8 @@ function Usuarios() {
     </>
   );
 
+  
+
   function handlerInsertarUsuario() {
     setVarShow(true);
     setCanDatos(data.usuarios.length + 1);
@@ -188,9 +221,40 @@ function Usuarios() {
   function handlerCrearUsuario() {
     //console.log(varShow);
     //createUser( {variables: {nombre: "Martina",apellido:"Gutierres",correo:"gm@gmail.com",rol:"Estudiante",estado:"Pendiente"} })  ;
-    createUser( {variables: {nombre: nombre,apellido:apellido,correo:correo,rol:rol,estado:estado} })  ;
+    createUser({
+      variables: {
+        nombre: nombre,
+        apellido: apellido,
+        correo: correo,
+        rol: rol,
+        estado: estado,
+      },
+    });
     setVarShow(false);
     alert("Usuario Creado");
+    window.location.reload(false);
+  }
+
+  function handlerEliminarUser(keyValue) {
+    console.log(keyValue);
+    alert("Elimando a " + keyValue);
+
+    deleteUser({
+      variables: {
+        nombre: keyValue
+      },
+    });
+
+    window.location.reload(false);
+  }
+
+  
+  function handlerEditarUser() {
+    alert("Eliminar suario");
+  }
+
+  function handlerActualizarPage() {
+    window.location.reload(false);
   }
 
 
