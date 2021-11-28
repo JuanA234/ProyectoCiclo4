@@ -9,7 +9,7 @@ return(
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src={require("./imgHome/imagen1.jpg").default}
+      src={require("../../assets/images/imagen1.jpg").default}
       alt="First slide"
     />
 
@@ -23,7 +23,7 @@ return(
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src={require("./imgHome/imagen2.jpg").default}
+      src={require("../../assets/images/imagen2.jpg").default}
       alt="Second slide"
     />
 
@@ -36,7 +36,7 @@ return(
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src={require("./imgHome/imagen3.jpg").default}
+      src={require("../../assets/images/imagen3.jpg").default}
       alt="Third slide"
     />
 
