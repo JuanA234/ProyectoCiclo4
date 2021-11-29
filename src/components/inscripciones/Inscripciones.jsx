@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 
 function Inscripciones(){
 return(
-<div>
+<div className="projectButton">
 <button onClick="handleClick()">Mostrar Proyectos</button>
 </div>  
 )

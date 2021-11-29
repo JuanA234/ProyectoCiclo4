@@ -48,3 +48,8 @@
   border: 0px ;
 }
 
+.projectButton{
+  justify-content:center;
+  display: flex;
+}
+
