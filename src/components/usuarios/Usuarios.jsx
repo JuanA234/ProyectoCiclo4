@@ -12,14 +12,14 @@ import { DELETE_USERS } from "../../graphql/Mutation.js";
 import { UPDATE_USER } from "../../graphql/Mutation.js";
 
 function Usuarios() {
-  const [usuarios, setUsuarios] = useState([]);
+  //const [usuarios, setUsuarios] = useState([]);
   const [varShow, setVarShow] = useState(false);
-  const [invisibleBotonActualizar, setInvisibleBotonActualizar] =
-    useState(true);
+  const [invisibleBotonActualizar, setInvisibleBotonActualizar] = useState(true);
   const [invisibleBotonInsertar, setInvisibleBotonInsertar] = useState(true);
 
   const [nombre, setNombre] = useState();
   const [apellido, setApellido] = useState();
+  const [personalID, setPersonalID] = useState();
   const [correo, setCorreo] = useState();
   const [rol, setRol] = useState();
   const [estado, setEstado] = useState();
@@ -65,6 +65,7 @@ function Usuarios() {
   useEffect(() => {
     console.log("Datos cambiaron", dataDeleteUsuario);
   }, [dataDeleteUsuario]);
+  //
 
   const infoInicial = "Usarios Almacenados en el sistema";
 
@@ -78,6 +79,7 @@ function Usuarios() {
             <tr>
               <th>Nombre</th>
               <th>Apellido</th>
+              <th>Id</th>
               <th>Correo</th>
               <th>Rol</th>
               <th>Estado</th>
@@ -87,9 +89,10 @@ function Usuarios() {
           <tbody>
             {data &&
               data.usuarios.map((datos) => (
-                <tr key={datos.nombre}>
+                <tr key={datos.personalID}>
                   <td>{datos.nombre}</td>
                   <td>{datos.apellido}</td>
+                  <td>{datos.personalID}</td>
                   <td>{datos.correo}</td>
                   <td>{datos.rol}</td>
                   <td>{datos.estado}</td>
@@ -100,6 +103,7 @@ function Usuarios() {
                         handlerEditarUser(
                           datos.nombre,
                           datos.apellido,
+                          datos.personalID,
                           datos.correo,
                           datos.rol,
                           datos.estado
@@ -109,9 +113,9 @@ function Usuarios() {
                       Editar
                     </Button>{" "}
                     <Button
-                      key={datos.nombre}
+                      key={datos.personalID}
                       className="btn btn-danger"
-                      onClick={() => handlerEliminarUser(datos.nombre)}
+                      onClick={() => handlerEliminarUser(datos.personalID)}
                     >
                       Eliminar
                     </Button>{" "}
@@ -140,7 +144,7 @@ function Usuarios() {
 
         <ModalBody>
           <FormGroup>
-            <label>Id:</label>
+            <label>Registro:</label>
             <input
               className="form-control"
               readOnly
@@ -170,6 +174,18 @@ function Usuarios() {
               placeholder={apellido}
             />
           </FormGroup>
+
+          <FormGroup>
+            <label>Personal Id:</label>
+            <input
+              className="form-control"
+              name="personalID"
+              type="number"
+              onChange={(e) => setPersonalID(e.target.value)}
+              placeholder={personalID}
+            />
+          </FormGroup>
+
 
           <FormGroup>
             <label>Correo:</label>
@@ -242,6 +258,7 @@ function Usuarios() {
     //console.log(nombre,apellido,correo,rol,estado);
     setNombre("");
     setApellido("");
+    setPersonalID("");
     setCorreo("");
     setRol("");
     setEstado("");
@@ -257,6 +274,7 @@ function Usuarios() {
       variables: {
         nombre: nombre,
         apellido: apellido,
+        personalID: personalID,
         correo: correo,
         rol: rol,
         estado: estado,
@@ -269,20 +287,21 @@ function Usuarios() {
   }
 
   function handlerEliminarUser(keyValue) {
-    console.log(keyValue);
+    console.log(typeof(keyValue));
     alert("Elimando a " + keyValue);
 
     deleteUser({
       variables: {
-        nombre: keyValue,
+        personalID: keyValue,
       },
     });
     window.location.reload(false);
   }
 
-  function handlerEditarUser(nom, apelli, corr, role, estat) {
+  function handlerEditarUser(nom, apelli,personId,corr, role, estat) {
     setNombre(nom);
     setApellido(apelli);
+    setPersonalID(personId);
     setCorreo(corr);
     setRol(role);
     setEstado(estat);
@@ -293,11 +312,12 @@ function Usuarios() {
   }
 
   function handlerEnviarEditUser() {
-    console.log(nombre,apellido,correo,rol,estado);
+    console.log(nombre,apellido,personalID,correo,rol,estado);
     actualizarUser({
       variables: {
         nombre: nombre,
         apellido: apellido,
+        personalID:personalID,
         correo: correo,
         rol: rol,
         estado: estado,

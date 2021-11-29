@@ -2,10 +2,11 @@ import {gql} from "apollo-boost"
 
 export const CREATE_USERS = gql`
 
-mutation createUser ($nombre:String!,$apellido:String!,$correo:String!,$rol:String!,$estado:String!){ 
+mutation createUser ($nombre:String!,$apellido:String!,$personalID:Int!,$correo:String!,$rol:String!,$estado:String!){ 
     createUser(
       nombre: $nombre,
       apellido:$apellido,
+      personalID:$personalID,
       correo: $correo,
         rol:$rol,
         estado:$estado,
@@ -18,9 +19,9 @@ mutation createUser ($nombre:String!,$apellido:String!,$correo:String!,$rol:Stri
 
 
 export const DELETE_USERS = gql`
-mutation deleteUser ($nombre:String!){ 
+mutation deleteUser ($personalID:Int!){ 
   deleteUser(
-    nombre: $nombre
+    personalID: $personalID
   )
     {
       _id
@@ -29,10 +30,11 @@ mutation deleteUser ($nombre:String!){
 `;
 
 export const UPDATE_USER = gql`
-  mutation actualizarUser ($nombre:String!,$apellido:String!,$correo:String!,$rol:String!,$estado:String!){ 
+  mutation actualizarUser ($nombre:String!,$apellido:String!,$personalID:Int!,$correo:String!,$rol:String!,$estado:String!){ 
     actualizarUser(
       nombre:$nombre 
       apellido:$apellido 
+      personalID:$personalID
       correo:$correo 
       rol:$rol 
       estado:$estado
