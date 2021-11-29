@@ -9,13 +9,14 @@ import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GET_USERS } from "../../graphql/Queries.js";
 import { CREATE_USERS } from "../../graphql/Mutation.js";
 import { DELETE_USERS } from "../../graphql/Mutation.js";
-
-
-
+import { UPDATE_USER } from "../../graphql/Mutation.js";
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [varShow, setVarShow] = useState(false);
+  const [invisibleBotonActualizar, setInvisibleBotonActualizar] =
+    useState(true);
+  const [invisibleBotonInsertar, setInvisibleBotonInsertar] = useState(true);
 
   const [nombre, setNombre] = useState();
   const [apellido, setApellido] = useState();
@@ -23,9 +24,6 @@ function Usuarios() {
   const [rol, setRol] = useState();
   const [estado, setEstado] = useState();
   const [canDatos, setCanDatos] = useState();
-
-
-
 
   //Parte Graphql
 
@@ -52,14 +50,21 @@ function Usuarios() {
   ] = useMutation(DELETE_USERS);
 
 
+  const [
+    actualizarUser,
+    {
+      data: dataActualizarUsuario,
+      error: errorActualizarUsario,
+      loading: loadingActualizarUsuario,
+    },
+  ] = useMutation(UPDATE_USER);
+
   /*--------------------------------*/
 
-
-  useEffect(()=> {
-    console.log("Datos cambiaron",dataDeleteUsuario);
-    },[dataDeleteUsuario]);
-    
-    
+  //Cuando hay un cambio en el dato mencionado se ejecuta la funcion interna
+  useEffect(() => {
+    console.log("Datos cambiaron", dataDeleteUsuario);
+  }, [dataDeleteUsuario]);
 
   const infoInicial = "Usarios Almacenados en el sistema";
 
@@ -68,7 +73,6 @@ function Usuarios() {
       <Container>
         <h1>{infoInicial}</h1>
         <br />
-
         <Table>
           <thead>
             <tr>
@@ -90,12 +94,23 @@ function Usuarios() {
                   <td>{datos.rol}</td>
                   <td>{datos.estado}</td>
                   <td>
-                    <Button color="primary" onClick={() => handlerEditarUser()}>
+                    <Button
+                      color="primary"
+                      onClick={() =>
+                        handlerEditarUser(
+                          datos.nombre,
+                          datos.apellido,
+                          datos.correo,
+                          datos.rol,
+                          datos.estado
+                        )
+                      }
+                    >
                       Editar
                     </Button>{" "}
                     <Button
                       key={datos.nombre}
-                      color="danger"
+                      className="btn btn-danger"
                       onClick={() => handlerEliminarUser(datos.nombre)}
                     >
                       Eliminar
@@ -105,16 +120,15 @@ function Usuarios() {
               ))}
           </tbody>
         </Table>
-
-        <Button color="danger" onClick={() => handlerInsertarUsuario()}>
+        <Button color="primary" onClick={() => handlerInsertarUsuario()}>
           Agregar Nuevo Usuario
         </Button>{" "}
-
-        <Button color="danger" onClick={()=> handlerActualizarPage()}>
+        <Button
+          className="btn btn-danger"
+          onClick={() => handlerActualizarPage()}
+        >
           Actualizar
         </Button>
-
-
       </Container>
 
       <Modal isOpen={varShow}>
@@ -142,6 +156,7 @@ function Usuarios() {
               name="personaje"
               type="text"
               onChange={(e) => setNombre(e.target.value)}
+              placeholder={nombre}
             />
           </FormGroup>
 
@@ -152,6 +167,7 @@ function Usuarios() {
               name="apellido"
               type="text"
               onChange={(e) => setApellido(e.target.value)}
+              placeholder={apellido}
             />
           </FormGroup>
 
@@ -162,6 +178,7 @@ function Usuarios() {
               name="correo"
               type="email"
               onChange={(e) => setCorreo(e.target.value)}
+              placeholder={correo}
             />
           </FormGroup>
 
@@ -172,6 +189,7 @@ function Usuarios() {
               name="rol"
               type="text"
               onChange={(e) => setRol(e.target.value)}
+              placeholder={rol}
             />
           </FormGroup>
 
@@ -182,17 +200,28 @@ function Usuarios() {
               name="estado"
               type="text"
               onChange={(e) => setEstado(e.target.value)}
+              placeholder={estado}
             />
           </FormGroup>
         </ModalBody>
 
         <ModalFooter>
-          <Button color="primary" onClick={() => handlerCrearUsuario()}>
+          <Button
+            color="primary"
+            disabled={invisibleBotonInsertar}
+            onClick={() => handlerCrearUsuario()}
+          >
             Insertar
           </Button>
+
+          <Button color="primary" disabled={invisibleBotonActualizar} onClick={() => handlerEnviarEditUser()}>
+            Actualizar
+          </Button>
+
+          
+
           <Button
-            className="btn btn-danger"
-            onClick={() => handlerCerrarModal()}
+            className="btn btn-danger" onClick={() => handlerCerrarModal()}
           >
             Cancelar
           </Button>
@@ -201,21 +230,24 @@ function Usuarios() {
     </>
   );
 
-  
-
   function handlerInsertarUsuario() {
+    setInvisibleBotonActualizar(true);
+    setInvisibleBotonInsertar(false);
+
     setVarShow(true);
     setCanDatos(data.usuarios.length + 1);
   }
 
   function handlerCerrarModal() {
-    setVarShow(false);
     //console.log(nombre,apellido,correo,rol,estado);
     setNombre("");
     setApellido("");
     setCorreo("");
     setRol("");
     setEstado("");
+    setInvisibleBotonActualizar(true);
+
+    setVarShow(false);
   }
 
   function handlerCrearUsuario() {
@@ -230,6 +262,7 @@ function Usuarios() {
         estado: estado,
       },
     });
+
     setVarShow(false);
     alert("Usuario Creado");
     window.location.reload(false);
@@ -241,23 +274,42 @@ function Usuarios() {
 
     deleteUser({
       variables: {
-        nombre: keyValue
+        nombre: keyValue,
       },
     });
-
     window.location.reload(false);
   }
 
-  
-  function handlerEditarUser() {
-    alert("Eliminar suario");
+  function handlerEditarUser(nom, apelli, corr, role, estat) {
+    setNombre(nom);
+    setApellido(apelli);
+    setCorreo(corr);
+    setRol(role);
+    setEstado(estat);
+    alert("Editando a " + nom);
+    setInvisibleBotonActualizar(false);
+    setInvisibleBotonInsertar(true);
+    setVarShow(true);
+  }
+
+  function handlerEnviarEditUser() {
+    console.log(nombre,apellido,correo,rol,estado);
+    actualizarUser({
+      variables: {
+        nombre: nombre,
+        apellido: apellido,
+        correo: correo,
+        rol: rol,
+        estado: estado,
+      },
+    });
+    window.location.reload(false);
+    setVarShow(false);
   }
 
   function handlerActualizarPage() {
     window.location.reload(false);
   }
-
-
 }
 
 export default Usuarios;

@@ -28,6 +28,25 @@ mutation deleteUser ($nombre:String!){
   }
 `;
 
+export const UPDATE_USER = gql`
+  mutation actualizarUser ($nombre:String!,$apellido:String!,$correo:String!,$rol:String!,$estado:String!){ 
+    actualizarUser(
+      nombre:$nombre 
+      apellido:$apellido 
+      correo:$correo 
+      rol:$rol 
+      estado:$estado
+      )
+  {
+    _id
+  }
+  }
+`;
+
+
+
+
+
 
 
   
