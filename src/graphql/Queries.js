@@ -5,7 +5,3 @@ query{usuarios{nombre,apellido,personalID,rol,correo,estado}}
 `;
 
 
-
-
-  
-  

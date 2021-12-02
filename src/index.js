@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 import {
   ApolloClient,
@@ -14,11 +15,22 @@ import { client } from "./graphql/ApolloClient.js";
 
 
 ReactDOM.render(
-  //<React.StrictMode>
+
+<Auth0Provider
+    domain="dev-grrrr64v.us.auth0.com"
+    clientId="eipt2t0elCGzl25tXqqRzVyWCdUxJUAA"
+    redirectUri={window.location.origin} //Este toma para ir a la url que le dejamos en la plataforma localhost etc
+  >
+  
+ 
+  <React.StrictMode>
   <ApolloProvider client={client}>
   <App />
-  </ApolloProvider>,
-  //</React.StrictMode>,
+  </ApolloProvider>
+  </React.StrictMode>
+
+
+  </Auth0Provider>,
 document.getElementById('root')
 );
 

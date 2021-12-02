@@ -125,7 +125,7 @@ function Usuarios() {
           </tbody>
         </Table>
         <Button color="primary" onClick={() => handlerInsertarUsuario()}>
-          Agregar Nuevo Usuario
+          Agregar Usuario
         </Button>{" "}
         <Button
           className="btn btn-danger"

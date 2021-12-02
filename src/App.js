@@ -10,10 +10,13 @@ import NavbarComponent from "./components/shared/navbar/NavbarComponent";
 import Usuarios from "./components/usuarios/Usuarios";
 import Avances from "./components/avances/Avances";
 import Proyectos from "./components/proyectos/Proyectos";
-import Incripciones from "./components/inscripciones/Inscripciones";
 import Inscripciones from "./components/inscripciones/Inscripciones";
 
+import { useAuth0 } from "@auth0/auth0-react";
+
+
 function App() {
+
 
   return (
    
@@ -54,6 +57,14 @@ function App() {
           <Route path="/avances" exact>
             <br />
             <Avances />
+            <br />
+          </Route>
+        </Switch>
+
+        <Switch>
+          <Route path="/login" exact>
+            <br />
+            <h1>Holiiiii</h1>
             <br />
           </Route>
         </Switch>
