@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment,Redirect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -8,14 +8,17 @@ import HomePage from "./components/home/HomePage";
 import NavbarComponent from "./components/shared/navbar/NavbarComponent";
 
 import Usuarios from "./components/usuarios/Usuarios";
+import UsuariosHowLider from "./components/usuarios/UsuariosHowLider";
 import Avances from "./components/avances/Avances";
 import Proyectos from "./components/proyectos/Proyectos";
 import Inscripciones from "./components/inscripciones/Inscripciones";
+import Forbiden from "./components/shared/forbiden/Forbiden";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
-
 function App() {
+
+  const {user,isAuthenticated}= useAuth0();
 
 
   return (
@@ -25,14 +28,13 @@ function App() {
 
         <Switch>
           <Route path="/" exact>
-            <HomePage />
+          <HomePage />  
           </Route>
         </Switch>
-
         <Switch>
           <Route path="/usuarios" exact>
           <br />
-            <Usuarios />
+           <UsuariosHowLider/>
             <br />
           </Route>
         </Switch>
@@ -62,9 +64,9 @@ function App() {
         </Switch>
 
         <Switch>
-          <Route path="/login" exact>
+          <Route path="/forbiden" exact>
             <br />
-            <h1>Holiiiii</h1>
+            <Forbiden/>
             <br />
           </Route>
         </Switch>
@@ -72,6 +74,8 @@ function App() {
       </Router>
   
   );
+
+  //{ isAuthenticated ? <Usuarios/>: <Redirect to ="/forbiden"/> }
 }
 
 export default App;

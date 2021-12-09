@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Container, Table, FormGroup } from "react-bootstrap";
 
+import Forbiden from "../shared/forbiden/Forbiden";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GET_USERS } from "../../graphql/Queries.js";
+import { GET_USERS_STUDENTS } from "../../graphql/Queries.js";
+import { VALID_USER } from "../../graphql/Queries.js";
 import { CREATE_USERS } from "../../graphql/Mutation.js";
 import { DELETE_USERS } from "../../graphql/Mutation.js";
 import { UPDATE_USER } from "../../graphql/Mutation.js";
 
+
+import { useAuth0 } from "@auth0/auth0-react";
+
+
+
 function Usuarios() {
+
   //const [usuarios, setUsuarios] = useState([]);
   const [varShow, setVarShow] = useState(false);
   const [invisibleBotonActualizar, setInvisibleBotonActualizar] = useState(true);
@@ -25,11 +35,18 @@ function Usuarios() {
   const [estado, setEstado] = useState();
   const [canDatos, setCanDatos] = useState();
 
+  const [userAutenti, setUserAutenti] = useState("");
+  const [correoAutenti, setCorreoAutenti] = useState("bryan.garcia@correounivalle.edu.co");
+  const [estadoAutenti, setEstadoAutenti] = useState("");
+  const [rolAutenti, setRolAutenti] = useState("");
+
+  const {user,isAuthenticated}= useAuth0();
+
   //Parte Graphql
 
-  //const { loading, error, data } = useQuery(GET_CHARACTERS);
   const { loading, error, data } = useQuery(GET_USERS);
-  loading ? console.log("cargando") : console.log(data.usuarios);
+  
+  loading ? console.log("cargando") : console.log(data);
 
   const [
     createUser,
@@ -59,15 +76,37 @@ function Usuarios() {
     },
   ] = useMutation(UPDATE_USER);
 
+
+  function Validar()  {
+    //Validando datos del usuario autenticado
+    const  {data: dataUsuarioEncontrado,error: errorUsuarioEncontrado,loading: loadingUsuarioEncontrado} =  useQuery(VALID_USER, {
+    //variables: {correo:"lp@gmail.com"} 
+    variables: {correo:correoAutenti}
+    });
+
+    let vari;
+    loadingUsuarioEncontrado ? console.log("cargando Usuario Buscado") : vari= dataUsuarioEncontrado['validarUsuario'].rol;
+    //setEstadoAutenti(dataUsuarioEncontrado);
+    return(vari)
+  }
+
+
   /*--------------------------------*/
 
   //Cuando hay un cambio en el dato mencionado se ejecuta la funcion interna
   useEffect(() => {
     console.log("Datos cambiaron", dataDeleteUsuario);
   }, [dataDeleteUsuario]);
-  //
 
   const infoInicial = "Usarios Almacenados en el sistema";
+
+
+  let test =Validar()
+  console.log(test)
+  
+
+
+  if(isAuthenticated && test=="Administrador"){
 
   return (
     <>
@@ -127,18 +166,29 @@ function Usuarios() {
         <Button color="primary" onClick={() => handlerInsertarUsuario()}>
           Agregar Usuario
         </Button>{" "}
+
         <Button
           className="btn btn-danger"
           onClick={() => handlerActualizarPage()}
         >
           Actualizar
+        </Button>{" "}
+
+        <Button
+          className="btn btn-danger"
+          onClick={() => handlerSearch()}
+        >
+          Test
         </Button>
+
+     
+
       </Container>
 
       <Modal isOpen={varShow}>
         <ModalHeader>
           <div>
-            <h3>Insertar Personaje</h3>
+            <h3>Datos Personaje</h3>
           </div>
         </ModalHeader>
 
@@ -234,8 +284,7 @@ function Usuarios() {
             Actualizar
           </Button>
 
-          
-
+      
           <Button
             className="btn btn-danger" onClick={() => handlerCerrarModal()}
           >
@@ -245,6 +294,20 @@ function Usuarios() {
       </Modal>
     </>
   );
+
+}
+
+else{
+
+  return (<Forbiden/>)
+
+
+}
+
+
+
+
+
 
   function handlerInsertarUsuario() {
     setInvisibleBotonActualizar(true);
@@ -286,6 +349,8 @@ function Usuarios() {
     window.location.reload(false);
   }
 
+
+
   function handlerEliminarUser(keyValue) {
     console.log(typeof(keyValue));
     alert("Elimando a " + keyValue);
@@ -311,6 +376,7 @@ function Usuarios() {
     setVarShow(true);
   }
 
+
   function handlerEnviarEditUser() {
     console.log(nombre,apellido,personalID,correo,rol,estado);
     actualizarUser({
@@ -327,9 +393,23 @@ function Usuarios() {
     setVarShow(false);
   }
 
+
   function handlerActualizarPage() {
     window.location.reload(false);
   }
+
+  function handlerSearch() {
+/* 
+    validando({
+      variables: {
+        correo: correoAutenti,
+      },
+    });
+*/
+  }
+
+
+
 }
 
 export default Usuarios;
