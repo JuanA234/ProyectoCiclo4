@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-
+import {ApolloProvider, ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client';
 
 
 import HomePage from "./components/home/HomePage";
@@ -13,11 +13,18 @@ import Avances from "./components/avances/Avances";
 import Proyectos from "components/proyectos/Proyectos";
 import Inscripciones from "./components/inscripciones/Inscripciones";
 
+const httpLink = createHttpLink({
+  uri:"https://servidor-graphql.herokuapp.com/graphql"
+})
 
+const client = new ApolloClient({
+  uri: httpLink,
+  cache: new InMemoryCache()
+})
 function App() {
 
   return (
-   
+    <ApolloProvider client  >
       <Router>
         <NavbarComponent />
 
@@ -60,6 +67,8 @@ function App() {
         </Switch>
 
       </Router>
+    </ApolloProvider>
+   
   
   );
 }

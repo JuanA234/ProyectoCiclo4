@@ -1,14 +1,11 @@
 import React from 'react';
 
-
-
-
-function Avances(){
-return(
-
-  <h1>Hola Avances</h1>
-  
-)
-};
+const Avances = () => {
+  return (
+    <div>
+      
+    </div>
+  )
+}
 
 export default Avances;
