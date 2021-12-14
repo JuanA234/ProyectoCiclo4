@@ -68,7 +68,7 @@ function Proyectos() {
 
   // Fin GraphQL
 
-  const infoInicial = "Inscripciones a proyectos";
+  const infoInicial = "Inscripciones a proyectos How Estudiante";
 
   let tipoUsuario = Validar();
   console.log(tipoUsuario);
@@ -100,21 +100,6 @@ function Proyectos() {
                     <td>{datos.proyecto}</td>
                     <td>{datos.estadoSolicitud}</td>
                     <td>
-                      <Button
-                        key={datos.nombre}
-                        color="primary"
-                        onClick={() => handlerAceptarInscripcion(datos.nombre,datos.proyecto,"Aceptado")}
-                        disabled={datos.estadoSolicitud=="Aceptado"}
-                      >
-                        Aceptar
-                      </Button>{" "}
-                      <Button
-                        key={datos.nombre}
-                        className="btn btn-danger"
-                        onClick={() => handlerEliminarInscripcion(datos.nombre,datos.proyecto)}
-                      >
-                        Eliminar
-                      </Button>{" "}
                     </td>
                   </tr>
                 ))}

@@ -5,10 +5,11 @@ import Forbiden from "../shared/forbiden/Forbiden";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import { GET_PROJECTS } from "../../graphql/Queries.js";
+import { GET_PROJECTS, GET_PROJECTS_LIDER } from "../../graphql/Queries.js";
 import { CREATE_PROJECT,DELETE_PROJECT,UPDATE_PROJECT } from "../../graphql/Mutation.js";
 import { useAuth0 } from "@auth0/auth0-react";
 import Validar from "../../functions/Validar.js";
+import ExtraerDatosUser from "../../functions/ExtraerDatosUser";
 
 function Proyectos() {
   //const [usuarios, setUsuarios] = useState([]);
@@ -28,11 +29,25 @@ function Proyectos() {
   const [avances, setAvances] = useState("");
   const [habilitado, setHabilitado] = useState("Inactivo");
 
+  const [nombreProyectoSeleccionado, setNombreProyectoSeleccionado] = useState();
+  const [iprincipalSeleccionado, setIprincipalSeleccionado] = useState();
+  const [investigadoresSeleccionado, setInvestigadoresSeleccionado] = useState();
+  const [objPrincipalSeleccionado, setObjPrincipalSeleccionado] = useState();
+  const [objSecundarioSeleccionado, setObjSecundarioSeleccionado] = useState();
+  const [estadoProyectoSeleccionado, setEstadoProyectoSeleccionado] = useState();
+  const [presupuestoSeleccionado, setPresupuestoSeleccionado] = useState();
+  const [avancesSeleccionado, setAvancesSeleccionado] = useState();
+  const [habilitadoSeleccionado, setHabilitadoSeleccionado] = useState();
+
+
   const { user, isAuthenticated } = useAuth0();
 
 
-  const { loading, error, data } = useQuery(GET_PROJECTS);
+  //const { loading, error, data } = useQuery(GET_PROJECTS);
+  //const  { loading, error, data} =  useQuery(GET_PROJECTS_LIDER, {variables: {iPrincipal:"Bryan García"}});
   
+  
+
   const [
     createProject,
     {
@@ -66,10 +81,25 @@ function Proyectos() {
 
   // Fin GraphQL
 
-  const infoInicial = "Proyectos Almacenados en el sistema";
+  const infoInicial = "Proyectos Almacenados en el sistema HOW LIDER";
 
-  let tipoUsuario = Validar();
-  console.log(tipoUsuario);
+  
+  {isAuthenticated ? localStorage.setItem("correo",user.email):localStorage.setItem("correo","")}
+
+  let tipoUsuario =Validar();
+  let datosPerfil = new Object();
+  datosPerfil= ExtraerDatosUser();
+
+  localStorage.setItem("nombre",datosPerfil.nombre);
+  localStorage.setItem("apellido",datosPerfil.apellido);
+  localStorage.setItem("personalID",datosPerfil.personalID);
+  localStorage.setItem("correo",datosPerfil.correo);
+  localStorage.setItem("estado",datosPerfil.estado);
+  localStorage.setItem("rol",datosPerfil.rol);
+
+  const  { loading, error, data} =  useQuery(GET_PROJECTS_LIDER, {variables: {iPrincipal:localStorage.getItem("nombre")+""+localStorage.getItem("apellido")}});
+
+
 
   if (isAuthenticated) {
     return (
@@ -87,14 +117,13 @@ function Proyectos() {
                 <th>Objetivos Secundarios</th>
                 <th>Estado</th>
                 <th>Presupuesto</th>
-                <th>Avances</th>
                 <th>Habilitado</th>
               </tr>
             </thead>
 
             <tbody>
               {data &&
-                data.proyectos.map((datos) => (
+                data.proyectosLider.map((datos) => (
                   <tr key={datos.nombre}>
                     <td>{datos.nombre}</td>
                     <td>{datos.iPrincipal}</td>
@@ -103,7 +132,6 @@ function Proyectos() {
                     <td>{datos.objSecundario}</td>
                     <td>{datos.estado}</td>
                     <td>{datos.presupuesto}</td>
-                    <td>{datos.avances}</td>
                     <td>{datos.habilitado}</td>
                
 
@@ -123,6 +151,7 @@ function Proyectos() {
                             datos.habilitado
                           )
                         }
+                        disabled={datos.habilitado=="Inactivo"}
                       >
                         Editar
                       </Button>{" "}
@@ -130,9 +159,28 @@ function Proyectos() {
                         key={datos.nombre}
                         className="btn btn-danger"
                         onClick={() => handlerEliminarProject(datos.nombre)}
+                        disabled={true}
                       >
                         Eliminar
                       </Button>{" "}
+
+                      <Button
+                        key={datos.nombre}
+                        className="primary"
+                        onClick={() => handlerCargarDatosProject(
+                          datos.nombre,
+                          datos.iPrincipal,
+                          datos.investigadores,
+                          datos.objPrincipal,
+                          datos.objSecundario,
+                          datos.estado,
+                          datos.presupuesto,
+                          datos.avances,
+                          datos.habilitado)}
+                      >
+                        Ver
+                      </Button>{" "}
+
                     </td>
                   </tr>
                 ))}
@@ -150,6 +198,45 @@ function Proyectos() {
             Actualizar
           </Button>{" "}
         </Container>
+
+        <br /><br /><br />
+
+        <Container>
+          <h1>Detalles del Proyecto Seleccionado</h1>
+          <br />
+          <Table>
+            <thead>
+              <tr>
+                <th>Nombre del proyecto</th>
+                <th>Investigador Principal</th>
+                <th>Investigadores asociados</th>
+                <th>Objetivo Principal</th>
+                <th>Objetivos Secundarios</th>
+                <th>Estado</th>
+                <th>Presupuesto</th>
+                <th>Avances</th>
+                <th>Habilitado</th>
+              </tr>
+            </thead>
+
+            <tbody>
+                  <tr>
+                    <td>{nombreProyectoSeleccionado}</td>
+                    <td>{iprincipalSeleccionado}</td>
+                    <td>{investigadoresSeleccionado}</td>
+                    <td>{objPrincipalSeleccionado}</td>
+                    <td>{objSecundarioSeleccionado}</td>
+                    <td>{estadoProyectoSeleccionado}</td>
+                    <td>{presupuestoSeleccionado}</td>
+                    <td>{avancesSeleccionado}</td>
+                    <td>{habilitadoSeleccionado}</td>
+                  </tr>
+            </tbody>
+          </Table>
+        </Container>
+
+
+
 
         <Modal isOpen={varShow}>
           <ModalHeader>
@@ -186,8 +273,8 @@ function Proyectos() {
                 className="form-control"
                 name="personaje"
                 type="text"
-                onChange={(e) => setIprincipal(e.target.value)}
-                placeholder={iprincipal}
+                readOnly
+                placeholder={localStorage.getItem("nombre")+""+localStorage.getItem("apellido")}
               />
             </FormGroup>
 
@@ -197,7 +284,7 @@ function Proyectos() {
                 className="form-control"
                 name="personaje"
                 type="text"
-                onChange={(e) => setInvestigadores(e.target.value)}
+                readOnly
                 placeholder={investigadores}
               />
             </FormGroup>
@@ -224,18 +311,8 @@ function Proyectos() {
               />
             </FormGroup>
 
-            {/*
-            <FormGroup>
-              <label>Estado del proyecto:</label>
-              <input
-                className="form-control"
-                name="proyectoEstate"
-                type="text"
-                onChange={(e) => setEstadoProyecto(e.target.value)}
-                placeholder={estadoProyecto}
-              />
-            </FormGroup>*/}
 
+            {/*
             <FormGroup>
             <label>Estado del proyecto:</label>
             <DropdownButton variant="outline-secondary" title={estadoProyecto}>
@@ -251,6 +328,7 @@ function Proyectos() {
             </DropdownButton>
             </FormGroup>
 
+           
             <FormGroup>
             <label>Habilitado:</label>
             <DropdownButton variant="outline-secondary" title={habilitado}>
@@ -262,7 +340,8 @@ function Proyectos() {
             </Dropdown.Item>
             </DropdownButton>
             </FormGroup>
-
+            */
+            }
 
 
             <FormGroup>
@@ -276,6 +355,8 @@ function Proyectos() {
               />
             </FormGroup>
 
+
+            {/*
             <FormGroup>
               <label>Avances del proyecto:</label>
               <input
@@ -286,6 +367,10 @@ function Proyectos() {
                 placeholder={avances}
               />
             </FormGroup>
+            */}
+
+
+
           </ModalBody>
 
           <ModalFooter>
@@ -323,7 +408,7 @@ function Proyectos() {
     setInvisibleBotonActualizar(true);
     setInvisibleBotonInsertar(false);
     setVarShow(true);
-    setCanDatos(data.proyectos.length + 1);
+    setCanDatos(data.proyectosLider.length + 1);
   }
 
   function handlerCerrarModal() {
@@ -344,14 +429,14 @@ function Proyectos() {
     createProject({
       variables: {
         nombre: nombreProyecto,
-        iPrincipal: iprincipal,
-        investigadores: investigadores,
+        iPrincipal: localStorage.getItem("nombre")+""+localStorage.getItem("apellido"),
+        investigadores: "",
         objPrincipal: objPrincipal,
         objSecundario: objSecundario,
-        estado: estadoProyecto,
+        estado: "Detenido",
         presupuesto: presupuesto,
-        avances: avances,
-        habilitado: habilitado,
+        avances: "",
+        habilitado: "Inactivo",
       },
     });
 
@@ -412,6 +497,34 @@ function Proyectos() {
   function handlerActualizarPage() {
     window.location.reload(false);
   }
+
+
+  function handlerCargarDatosProject() {
+    window.location.reload(false);
+  }
+  
+  function handlerCargarDatosProject(
+    nombre,
+    iPrincipal,
+    investigadores,
+    objPrincipal,
+    objSecundario,
+    estado,
+    presupuesto,
+    avances,
+    habilitado) 
+    {
+    setNombreProyectoSeleccionado(nombre);
+    setIprincipalSeleccionado(iPrincipal);
+    setInvestigadoresSeleccionado(investigadores);
+    setObjPrincipalSeleccionado(objPrincipal);
+    setObjSecundarioSeleccionado(objSecundario);
+    setEstadoProyectoSeleccionado(estado);
+    setPresupuestoSeleccionado(presupuesto);
+    setAvancesSeleccionado(avances);
+    setHabilitadoSeleccionado(habilitado);
+  }
+
 
 }
 

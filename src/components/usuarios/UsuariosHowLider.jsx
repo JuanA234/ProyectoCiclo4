@@ -17,7 +17,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 
 
-function Usuarios() {
+function UsuariosHowLider() {
   //const [usuarios, setUsuarios] = useState([]);
   const [varShow, setVarShow] = useState(false);
   const [invisibleBotonActualizar, setInvisibleBotonActualizar] =useState(true);
@@ -54,38 +54,9 @@ function Usuarios() {
     },
   ] = useMutation(UPDATE_USER);
 
-  function Validar() {
-    //Validando datos del usuario autenticado
-    const {
-      data: dataUsuarioEncontrado,
-      error: errorUsuarioEncontrado,
-      loading: loadingUsuarioEncontrado,
-    } = useQuery(VALID_USER, {
-      //variables: {correo:"lp@gmail.com"}
-      variables: { correo: correoAutenti },
-    });
 
-    let vari;
-    loadingUsuarioEncontrado
-      ? console.log("cargando Usuario Buscado")
-      : (vari = dataUsuarioEncontrado["validarUsuario"].rol);
-    //setEstadoAutenti(dataUsuarioEncontrado);
-    return vari;
-  }
-
-  /*--------------------------------*/
-
-  //Cuando hay un cambio en el dato mencionado se ejecuta la funcion interna
-  /*useEffect(() => {
-    console.log("Datos cambiaron", dataDeleteUsuario);
-  }, [dataDeleteUsuario]);
-  */
-
-  const infoInicial = "Usarios Almacenados en el sistema";
-
-  let test = Validar();
-  console.log(test);
-
+  
+  const infoInicial = "Usuarios Almacenados en el sistema";
 
 
 
@@ -93,7 +64,8 @@ function Usuarios() {
     return (
       <>
         <Container>
-          <h1>{infoInicial}</h1>
+        <h1>{infoInicial}</h1>
+
           <br />
           <Table>
             <thead>
@@ -261,4 +233,4 @@ function Usuarios() {
   }
 }
 
-export default Usuarios;
+export default UsuariosHowLider;

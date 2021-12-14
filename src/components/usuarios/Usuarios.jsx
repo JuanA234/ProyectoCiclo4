@@ -18,6 +18,9 @@ import { UPDATE_USER } from "../../graphql/Mutation.js";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
+import Validar from "../../functions/Validar.js"
+
+
 
 
 function Usuarios() {
@@ -41,6 +44,7 @@ function Usuarios() {
   const [rolAutenti, setRolAutenti] = useState("");
 
   const {user,isAuthenticated}= useAuth0();
+
 
   //Parte Graphql
 
@@ -77,36 +81,44 @@ function Usuarios() {
   ] = useMutation(UPDATE_USER);
 
 
+  /*
   function Validar()  {
+
+    const useremail= user['email'];
+    console.log(user);
+    console.log(useremail);
+
     //Validando datos del usuario autenticado
     const  {data: dataUsuarioEncontrado,error: errorUsuarioEncontrado,loading: loadingUsuarioEncontrado} =  useQuery(VALID_USER, {
     //variables: {correo:"lp@gmail.com"} 
-    variables: {correo:correoAutenti}
+    variables: {correo:useremail}
     });
+
 
     let vari;
     loadingUsuarioEncontrado ? console.log("cargando Usuario Buscado") : vari= dataUsuarioEncontrado['validarUsuario'].rol;
     //setEstadoAutenti(dataUsuarioEncontrado);
     return(vari)
   }
+   
+  */
 
 
   /*--------------------------------*/
 
   //Cuando hay un cambio en el dato mencionado se ejecuta la funcion interna
   useEffect(() => {
-    console.log("Datos cambiaron", dataDeleteUsuario);
+    //console.log("Datos cambiaron", dataDeleteUsuario);
   }, [dataDeleteUsuario]);
 
-  const infoInicial = "Usarios Almacenados en el sistema";
 
+  const infoInicial = "Usuarios Almacenados en el sistema";
 
-  let test =Validar()
-  console.log(test)
+  let tipoUsuario =Validar()
+  console.log(tipoUsuario)
   
 
-
-  if(isAuthenticated && test=="Administrador"){
+  if(isAuthenticated){
 
   return (
     <>
@@ -303,9 +315,6 @@ else{
 
 
 }
-
-
-
 
 
 
