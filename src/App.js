@@ -13,18 +13,19 @@ import Avances from "./components/avances/Avances";
 import Proyectos from "components/proyectos/Proyectos";
 import Inscripciones from "./components/inscripciones/Inscripciones";
 
-const httpLink = createHttpLink({
-  uri:"https://servidor-graphql.herokuapp.com/graphql"
-})
+// const httpLink = createHttpLink({
+//   uri:"http://localhost:4000/graphql"
+// })
 
 const client = new ApolloClient({
-  uri: httpLink,
+  uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache()
 })
+
 function App() {
 
   return (
-    <ApolloProvider client  >
+    <ApolloProvider client={client}  >
       <Router>
         <NavbarComponent />
 
