@@ -12,7 +12,7 @@ import Usuarios from "./components/usuarios/Usuarios";
 import Avances from "./components/avances/Avances";
 import Proyectos from "components/proyectos/Proyectos";
 import Inscripciones from "./components/inscripciones/Inscripciones";
-import { EditarUsuario } from "components/usuarios/EditarUsuario";
+import  EditarUsuario  from "components/usuarios/EditarUsuario";
 
 // const httpLink = createHttpLink({
 //   uri:"http://localhost:4000/graphql"
