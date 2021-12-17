@@ -2,16 +2,19 @@ import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { GET_USUARIOS } from 'graphql/usuarios/queries';
+import { Enum_Rol } from 'utils/enums';
+import { Enum_EstadoUsuario } from 'utils/enums';
 const Usuarios = () => {
-  // const { data, error, loading } = useQuery(GET_USUARIOS);
+  const { data, error, loading } = useQuery(GET_USUARIOS);
   
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error('Error consultando los usuarios');
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    if (error) {
+      toast.error('Error consultando los usuarios');
+    }
+  }, [error]);
 
-  // if (loading) return <div>Cargando....</div>;
+  if (loading) return <div>Cargando....</div>;
   return (
     <div>
       <div>

@@ -8,9 +8,6 @@ return(
 <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
   <div className="container-fluid">
     
-    <a className="navbar-brand" href="">Plataforma de Ventas</a>
-    
-
     <div className="collapse navbar-collapse" id="navbarNavDropdown">
 
       <ul className="navbar-nav">
@@ -30,10 +27,6 @@ return(
 
         <li className="nav-item">
           <Link to="/inscripciones" className="nav-link active" aria-current="page" >Gestión inscripciones</Link>
-        </li>
-
-        <li className="nav-item">
-          <Link to="/avances" className="nav-link active" aria-current="page" >Gestión Avances</Link>
         </li>
         
       </ul>
