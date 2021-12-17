@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import {ApolloProvider, ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client';
+import { ApolloProvider, ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 
 
 import HomePage from "./components/home/HomePage";
@@ -12,6 +12,7 @@ import Usuarios from "./components/usuarios/Usuarios";
 import Avances from "./components/avances/Avances";
 import Proyectos from "components/proyectos/Proyectos";
 import Inscripciones from "./components/inscripciones/Inscripciones";
+import { EditarUsuario } from "components/usuarios/EditarUsuario";
 
 // const httpLink = createHttpLink({
 //   uri:"http://localhost:4000/graphql"
@@ -36,39 +37,48 @@ function App() {
         </Switch>
 
         <Switch>
-          <Route path="/usuarios" exact>
+          <Route path={['/usuarios', '/usuarios/editar/:_id']}>
+            <Switch>
+              <Route path="/usuarios" exact>
+                <br />
+                <Usuarios />
+                <br />
+              </Route>
+              <Route path='/usuarios/editar/:_id' exact>
+                <br />
+                <EditarUsuario />
+                <br />
+              </Route>
+        </Switch>
+          </Route>
+      </Switch>
+
+      <Switch>
+        <Route path="/proyectos" exact>
           <br />
-            <Usuarios />
-            <br />
-          </Route>
-        </Switch>
-
-        <Switch>
-          <Route path="/proyectos" exact>
-            <br />
-              <Proyectos />
-            <br />
-          </Route>
-        </Switch>
-
-        <Switch>
-          <Route path="/inscripciones" exact>
+          <Proyectos />
           <br />
-            <Inscripciones/>
-            <br />
-          </Route>
-        </Switch>
+        </Route>
+      </Switch>
 
-        <Switch>
-          <Route path="/avances" exact>
-            <br />
-            <Avances />
-            <br />
-          </Route>
-        </Switch>
+      <Switch>
+        <Route path="/inscripciones" exact>
+          <br />
+          <Inscripciones />
+          <br />
+        </Route>
+      </Switch>
 
-      </Router>
-    </ApolloProvider>
+      <Switch>
+        <Route path="/avances" exact>
+          <br />
+          <Avances />
+          <br />
+        </Route>
+      </Switch>
+
+    </Router>
+    </ApolloProvider >
    
   
   );
