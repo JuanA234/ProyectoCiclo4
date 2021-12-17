@@ -6,7 +6,7 @@ import { ApolloProvider, ApolloClient, createHttpLink, InMemoryCache } from '@ap
 
 import HomePage from "./components/home/HomePage";
 
-import NavbarComponent from "./components/shared/navbar/NavbarComponent";
+import NavbarComponent from "./components/shared/NavbarComponent";
 
 import Usuarios from "./components/usuarios/Usuarios";
 import Avances from "./components/avances/Avances";
