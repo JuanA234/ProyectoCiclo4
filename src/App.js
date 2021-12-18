@@ -19,7 +19,7 @@ import Register from "components/auth/Register";
 import Login from "components/auth/Login";
 
 // const httpLink = createHttpLink({
-//   uri:"http://localhost:4000/graphql"
+//   uri:"https://servidor-graphql.herokuapp.com/graphql"
 // })
 
 const client = new ApolloClient({
