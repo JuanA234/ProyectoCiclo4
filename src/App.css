@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+  
+}
+
+
+.divGenerico {
+  background-color: #19bde6;
+  height: 600px;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  border: 0px ;
+}
+
+<<<<<<< HEAD
+.projectButton{
+  justify-content:center;
+  display: flex;
+}
+
+=======
+.tabla {
+  width: 100%;
+  margin: 10px;
+  overflow-y: scroll;
+}
+
+.tabla td,
+.tabla th {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.tabla th {
+  background-color: #04aa46;
+  color: white;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+}
+
+.tabla tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.tabla tr:hover {
+  background-color: #ddd;
+}
+
+
+.input {
+  @apply p-2 border border-indigo-200 focus:outline-none focus:border-indigo-800 rounded-md shadow-sm;
+}
+>>>>>>> 6877efa5894782feec45d148b5285c89d91a4506
