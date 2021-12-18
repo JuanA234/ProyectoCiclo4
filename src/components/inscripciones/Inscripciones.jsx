@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 function Inscripciones(){
 return(
 <div className="projectButton">
-<button onClick="handleClick()">Mostrar Proyectos</button>
+<button onClick="handleClick()" type="button">Mostrar Proyectos</button>
 </div>  
 )
 };
