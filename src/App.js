@@ -18,10 +18,7 @@ import AuthLayout from "layouts/AuthLayout";
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
 
-// const httpLink = createHttpLink({
-//   uri:"https://servidor-graphql.herokuapp.com/graphql"
-// })
-
+//    
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache()
@@ -37,7 +34,7 @@ function App() {
       <Router>
         <NavbarComponent />
         <Switch>
-          <Route path={['/usuarios', '/usuarios/editar/:_id','/proyectos', 'inscripciones']}>
+          <Route path={['/usuarios', '/usuarios/editar/:_id','/proyectos', '/inscripciones']}>
             <PrivateLayout>
             <Switch>
               <Route path='/usuarios' exact>
@@ -46,10 +43,10 @@ function App() {
               <Route path='/usuarios/editar/:_id' exact>
                 <EditarUsuario />
               </Route>
-              <Route path='/proyectos'>
+              <Route path='/proyectos' exact>
                 <Proyectos/>
               </Route>
-              <Route path='/inscripciones'>
+              <Route path='/inscripciones' exact>
                 <Inscripciones/>
               </Route>
             </Switch>   
