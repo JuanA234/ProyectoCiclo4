@@ -3,13 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_USUARIO } from 'graphql/usuarios/queries';
 import useFormData from 'hooks/useFormData';
-import { toast } from 'react-toastify';
 import { EDITAR_USUARIO } from 'graphql/usuarios/mutations';
 import { Enum_EstadoUsuario } from 'utils/enums';
 import ButtonLoading from 'components/shared/ButtonLoading';
 import DropDown from 'components/shared/Dropdown';
-import Input from 'components/shared/Input';
-
+import Input from 'components/shared/Input'
+import { toast } from 'react-toastify';
 const EditarUsuario = () => {
     const { form, formData, updateFormData } = useFormData(null);
     const { _id } = useParams();
@@ -37,17 +36,17 @@ const EditarUsuario = () => {
   
     useEffect(() => {
       if (mutationData) {
-        toast.success('Usuario modificado correctamente');
+        toast.success("Usuario modificado con éxito");
       }
     }, [mutationData]);
   
     useEffect(() => {
       if (mutationError) {
-        toast.error('Error modificando el usuario');
+        toast.error("Error modificando usuarios");
       }
-  
+
       if (queryError) {
-        toast.error('Error consultando el usuario');
+        toast.error("Error consultando usuarios") 
       }
     }, [queryError, mutationError]);
   

@@ -12,7 +12,11 @@ import Usuarios from "./components/usuarios/Usuarios";
 import Avances from "./components/avances/Avances";
 import Proyectos from "components/proyectos/Proyectos";
 import Inscripciones from "./components/inscripciones/Inscripciones";
-import  EditarUsuario  from "components/usuarios/EditarUsuario";
+import EditarUsuario from "components/usuarios/EditarUsuario";
+import PrivateLayout from "layouts/PrivateLayout";
+import AuthLayout from "layouts/AuthLayout";
+import Register from "components/auth/Register";
+import Login from "components/auth/Login";
 
 // const httpLink = createHttpLink({
 //   uri:"http://localhost:4000/graphql"
@@ -26,61 +30,56 @@ const client = new ApolloClient({
 function App() {
 
   return (
+    <div className="App">
+
+      
     <ApolloProvider client={client}  >
       <Router>
         <NavbarComponent />
-
         <Switch>
-          <Route path="/" exact>
-            <HomePage />
-          </Route>
-        </Switch>
-
-        <Switch>
-          <Route path={['/usuarios', '/usuarios/editar/:_id']}>
+          <Route path={['/usuarios', '/usuarios/editar/:_id','/proyectos', 'inscripciones']}>
+            <PrivateLayout>
             <Switch>
-              <Route path="/usuarios" exact>
-                <br />
+              <Route path='/usuarios' exact>
                 <Usuarios />
-                <br />
               </Route>
               <Route path='/usuarios/editar/:_id' exact>
-                <br />
                 <EditarUsuario />
-                <br />
               </Route>
-        </Switch>
+              <Route path='/proyectos'>
+                <Proyectos/>
+              </Route>
+              <Route path='/inscripciones'>
+                <Inscripciones/>
+              </Route>
+            </Switch>   
+            </PrivateLayout>
           </Route>
-      </Switch>
-
-      <Switch>
-        <Route path="/proyectos" exact>
-          <br />
-          <Proyectos />
-          <br />
-        </Route>
-      </Switch>
-
-      <Switch>
-        <Route path="/inscripciones" exact>
-          <br />
-          <Inscripciones />
-          <br />
-        </Route>
-      </Switch>
-
-      <Switch>
-        <Route path="/avances" exact>
-          <br />
-          <Avances />
-          <br />
-        </Route>
-      </Switch>
-
-    </Router>
+          <Route path={['/login', '/register']}>
+            <AuthLayout>
+            <Switch>
+              <Route path='/login'>
+                <Login />
+              </Route>
+              <Route path='/register'>
+                <Register/>
+              </Route>
+            </Switch>   
+            </AuthLayout>
+          </Route>
+          <Route path={['/']}>
+            <Switch>
+              <Route path='/'>
+                <HomePage/>
+              </Route>
+            </Switch>
+          </Route>
+        </Switch>
+      </Router>
     </ApolloProvider >
-   
-  
+    </div>
+
+
   );
 }
 
