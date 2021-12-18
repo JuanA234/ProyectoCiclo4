@@ -52,6 +52,13 @@
   border: 0px ;
 }
 
+<<<<<<< HEAD
+.projectButton{
+  justify-content:center;
+  display: flex;
+}
+
+=======
 .tabla {
   width: 100%;
   margin: 10px;
@@ -84,3 +91,4 @@
 .input {
   @apply p-2 border border-indigo-200 focus:outline-none focus:border-indigo-800 rounded-md shadow-sm;
 }
+>>>>>>> 6877efa5894782feec45d148b5285c89d91a4506

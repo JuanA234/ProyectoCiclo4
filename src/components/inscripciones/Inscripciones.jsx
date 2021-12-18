@@ -1,13 +1,11 @@
-import React from 'react';
-
-
+import React, {useState} from 'react';
 
 
 function Inscripciones(){
 return(
-
-  <h1>Hola Inscripciones</h1>
-  
+<div className="projectButton">
+<button onClick="handleClick()" type="button">Mostrar Proyectos</button>
+</div>  
 )
 };
 
