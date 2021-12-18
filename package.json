@@ -48,15 +48,10 @@
     "react-dom": "^17.0.2",
     "react-loading": "^2.0.3",
     "react-router-dom": "^5.2.0",
-<<<<<<< HEAD
     "react-scripts": "^4.0.3",
-    "web-vitals": "^1.1.2"
-=======
-    "react-scripts": "4.0.3",
     "react-toastify": "^8.1.0",
     "web-vitals": "^1.1.2",
     "yarn": "^1.22.17"
->>>>>>> 6877efa5894782feec45d148b5285c89d91a4506
   },
   "scripts": {
     "start": "craco start",

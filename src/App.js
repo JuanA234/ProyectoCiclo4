@@ -17,7 +17,8 @@ import PrivateLayout from "layouts/PrivateLayout";
 import AuthLayout from "layouts/AuthLayout";
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
-
+import { AuthContext } from "context/AuthContext";
+import { useState } from "react";
 //    
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -26,11 +27,22 @@ const client = new ApolloClient({
 
 function App() {
 
+  const [authToken, setAuthToken] = useState('');
+
+  const setToken = (token) => {
+    setAuthToken(token);
+    if (token) {
+      localStorage.setItem('token', JSON.stringify(token));
+    } else {
+      localStorage.removeItem('token');
+    }
+  };
   return (
     <div className="App">
 
       
     <ApolloProvider client={client}  >
+      <AuthContext.Provider value={{ authToken, setAuthToken, setToken}}>
       <Router>
         <NavbarComponent />
         <Switch>
@@ -73,6 +85,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
+      </AuthContext.Provider>
     </ApolloProvider >
     </div>
 
