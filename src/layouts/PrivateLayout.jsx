@@ -12,7 +12,7 @@ const PrivateLayout = ({children}) => {
             {children}
           </div>
         </div>
-        <ToastContainer />
+        <ToastContainer />|
       </div>
     )
 }

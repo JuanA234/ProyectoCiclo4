@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
+import React, { useState } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { ApolloProvider, ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 
 
@@ -18,15 +18,21 @@ import AuthLayout from "layouts/AuthLayout";
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
 import { AuthContext } from "context/AuthContext";
-import { useState } from "react";
-//    
+import { UserContext } from "context/UserContext";
+
+// const httpLink = createHttpLink({
+//   // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
+//   uri: 'http://localhost:4000/graphql',
+// });
+
+
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache()
 })
 
 function App() {
-
+  const [userData, setUserData] = useState({});
   const [authToken, setAuthToken] = useState('');
 
   const setToken = (token) => {
@@ -37,12 +43,15 @@ function App() {
       localStorage.removeItem('token');
     }
   };
+
+  
   return (
     <div className="App">
 
       
     <ApolloProvider client={client}  >
       <AuthContext.Provider value={{ authToken, setAuthToken, setToken}}>
+      <UserContext.Provider value={{ userData, setUserData }}>
       <Router>
         <NavbarComponent />
         <Switch>
@@ -69,9 +78,15 @@ function App() {
             <Switch>
               <Route path='/login'>
                 <Login />
+                <Route>
+                  {setToken ? <Redirect to='/'/> : <Login/>}
+                </Route>
               </Route>
               <Route path='/register'>
-                <Register/>
+                <Register/>|
+                <Route>
+                  {setToken ? <Redirect to='/'/> : <Register/>}
+                </Route>
               </Route>
             </Switch>   
             </AuthLayout>
@@ -85,6 +100,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
+      </UserContext.Provider>
       </AuthContext.Provider>
     </ApolloProvider >
     </div>
