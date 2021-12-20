@@ -2,20 +2,18 @@ import Input from 'components/shared/Input'
 import ButtonLoading from 'components/shared/ButtonLoading'
 import React from 'react'
 import DropDown from 'components/shared/Dropdown'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { Enum_Rol } from 'utils/enums'
 import useFormData from 'hooks/useFormData'
 import { useMutation } from '@apollo/client';
 import { REGISTRO } from 'graphql/auth/mutations'
-import { useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
+import { useEffect } from 'react';
 import { useAuth } from 'context/AuthContext'
 
 const Register = () => {
 
-    const { setToken } = useAuth();
 
-    const redirect = Redirect();
+    const { setToken } = useAuth();
 
     const { form, formData, updateFormData } = useFormData();
 
@@ -25,15 +23,13 @@ const Register = () => {
         e.preventDefault();
         registro({ variables: formData });
       };
-
       useEffect(() => {
         if (dataMutation) {
           if (dataMutation.registro.token) {
             setToken(dataMutation.registro.token);
-            redirect('/');
           }
         }
-      }, [dataMutation, setToken, redirect]);
+      }, [dataMutation]);
 
     return (
         <div>
@@ -64,8 +60,8 @@ const Register = () => {
                         <Input label='Contraseña:' name='password' type='password' required />
                     </div>
                     <ButtonLoading
-                        //   disabled={Object.keys(formData).length === 0}
-                        //   loading={false}
+                          disabled={Object.keys(formData).length === 0}
+                          loading={false}
                         text='Registrarme'
                     />
                 </form>
@@ -76,6 +72,7 @@ const Register = () => {
             </div>
         </div>
     )
+
 }
 
 export default Register
