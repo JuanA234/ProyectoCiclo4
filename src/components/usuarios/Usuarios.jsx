@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { GET_USUARIOS } from 'graphql/usuarios/queries';
 import { Enum_Rol } from 'utils/enums';
 import { Enum_EstadoUsuario } from 'utils/enums';
+import PrivateRoute from 'components/PrivateRoute';
 const Usuarios = () => {
   const { data, error, loading } = useQuery(GET_USUARIOS);
   
@@ -16,8 +17,8 @@ const Usuarios = () => {
 
   if (loading) return <div>Cargando....</div>;
   return (
-    <div>
-      <div>
+    <PrivateRoute roleList={['ADMINISTRADOR']}>
+       <div>
         Datos Usuarios:
         <table className='tabla'>
           <thead>
@@ -56,7 +57,8 @@ const Usuarios = () => {
           </tbody>
         </table>
       </div>
-    </div>
+    </PrivateRoute>
+
   )
 }
 
