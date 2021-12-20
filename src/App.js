@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ApolloProvider, ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-
+import jwt_decode from 'jwt-decode';
 
 import HomePage from "./components/home/HomePage";
 
 import NavbarComponent from "./components/shared/NavbarComponent";
-
+import { setContext } from '@apollo/client/link/context';
 import Usuarios from "./components/usuarios/Usuarios";
-import Avances from "./components/avances/Avances";
 import Proyectos from "components/proyectos/Proyectos";
 import Inscripciones from "./components/inscripciones/Inscripciones";
 import EditarUsuario from "components/usuarios/EditarUsuario";
@@ -20,15 +19,26 @@ import Login from "components/auth/Login";
 import { AuthContext } from "context/AuthContext";
 import { UserContext } from "context/UserContext";
 
-// const httpLink = createHttpLink({
-//   // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
-//   uri: 'http://localhost:4000/graphql',
-// });
+const httpLink = createHttpLink({
+  // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
+  uri: 'http://localhost:4000/graphql',
+});
 
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = JSON.parse(localStorage.getItem('token'));
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  link: authLink.concat(httpLink),
 })
 
 function App() {
@@ -44,65 +54,48 @@ function App() {
     }
   };
 
-  
+  useEffect(() => {
+    if (authToken) {
+      const decoded = jwt_decode(authToken);
+      setUserData({
+        _id: decoded._id,
+        nombre: decoded.nombre,
+        apellido: decoded.apellido,
+        identificacion: decoded.identificacion,
+        correo: decoded.correo,
+        rol: decoded.rol,
+        foto: decoded.foto,
+      });
+    }
+  }, [authToken]);
+
+
   return (
     <div className="App">
 
-      
-    <ApolloProvider client={client}  >
-      <AuthContext.Provider value={{ authToken, setAuthToken, setToken}}>
-      <UserContext.Provider value={{ userData, setUserData }}>
-      <Router>
-        <NavbarComponent />
-        <Switch>
-          <Route path={['/usuarios', '/usuarios/editar/:_id','/proyectos', '/inscripciones']}>
-            <PrivateLayout>
-            <Switch>
-              <Route path='/usuarios' exact>
-                <Usuarios />
-              </Route>
-              <Route path='/usuarios/editar/:_id' exact>
-                <EditarUsuario />
-              </Route>
-              <Route path='/proyectos' exact>
-                <Proyectos/>
-              </Route>
-              <Route path='/inscripciones' exact>
-                <Inscripciones/>
-              </Route>
-            </Switch>   
-            </PrivateLayout>
-          </Route>
-          <Route path={['/login', '/register']}>
-            <AuthLayout>
-            <Switch>
-              <Route path='/login'>
-                <Login />
-                <Route>
-                  {setToken ? <Redirect to='/'/> : <Login/>}
+
+      <ApolloProvider client={client}  >
+        <AuthContext.Provider value={{ authToken, setAuthToken, setToken }}>
+          <UserContext.Provider value={{ userData, setUserData }}>
+            <BrowserRouter>
+              <Routes>
+                <Route path='/' element={<PrivateLayout />}>
+                  <Route path='' element={<HomePage />} />
+                  <Route path='/usuarios' element={<Usuarios />} />
+                  <Route
+                    path='/usuarios/editar/:_id'
+                    element={<EditarUsuario />}
+                  />
                 </Route>
-              </Route>
-              <Route path='/register'>
-                <Register/>|
-                <Route>
-                  {setToken ? <Redirect to='/'/> : <Register/>}
+                <Route path='/auth' element={<AuthLayout />}>
+                  <Route path='register' element={<Register />} />
+                  <Route path='login' element={<Login />} />
                 </Route>
-              </Route>
-            </Switch>   
-            </AuthLayout>
-          </Route>
-          <Route path={['/']}>
-            <Switch>
-              <Route path='/'>
-                <HomePage/>
-              </Route>
-            </Switch>
-          </Route>
-        </Switch>
-      </Router>
-      </UserContext.Provider>
-      </AuthContext.Provider>
-    </ApolloProvider >
+              </Routes>
+            </BrowserRouter>
+          </UserContext.Provider>
+        </AuthContext.Provider>
+      </ApolloProvider >
     </div>
 
 

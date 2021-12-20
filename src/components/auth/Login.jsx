@@ -7,8 +7,10 @@ import { LOGIN } from 'graphql/auth/mutations'
 import { useAuth } from 'context/AuthContext'
 import { useMutation } from '@apollo/client'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
+    const navigate = useNavigate();
     const { setToken } = useAuth();
     const { form, formData, updateFormData } = useFormData();
     const [login, { data: dataMutation, loading: mutationLoading }] = useMutation(LOGIN);
@@ -17,9 +19,10 @@ const Login = () => {
         if (dataMutation) {
           if (dataMutation.login.token) {
             setToken(dataMutation.login.token);
+            navigate('/');
           }
         }
-      }, [dataMutation]);
+      }, [dataMutation, setToken, navigate]);
 
     
   const submitForm = (e) => {
@@ -45,7 +48,7 @@ const Login = () => {
             disabled={Object.keys(formData).length === 0}
             loading={mutationLoading}
             text='Iniciar Sesión'
-          />
+            />
         </form>
         <span>¿No tienes una cuenta?</span>
         <Link to='/auth/register'>

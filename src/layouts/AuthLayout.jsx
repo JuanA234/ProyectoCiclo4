@@ -1,11 +1,12 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
-const AuthLayout = ({children}) => {
+const AuthLayout = () => {
     return (
         <div className='flex flex-col md:flex-row flex-no-wrap h-screen'>
         <div className='flex w-full h-full'>
           <div className='w-full h-full'>
-            {children}
+            <Outlet />
           </div>
         </div>
       </div>

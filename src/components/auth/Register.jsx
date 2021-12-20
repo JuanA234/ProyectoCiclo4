@@ -2,7 +2,7 @@ import Input from 'components/shared/Input'
 import ButtonLoading from 'components/shared/ButtonLoading'
 import React from 'react'
 import DropDown from 'components/shared/Dropdown'
-import { Link, Redirect } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Enum_Rol } from 'utils/enums'
 import useFormData from 'hooks/useFormData'
 import { useMutation } from '@apollo/client';
@@ -12,6 +12,7 @@ import { useAuth } from 'context/AuthContext'
 
 const Register = () => {
 
+    const navigate = useNavigate();
 
     const { setToken } = useAuth();
 
@@ -27,9 +28,10 @@ const Register = () => {
         if (dataMutation) {
           if (dataMutation.registro.token) {
             setToken(dataMutation.registro.token);
+            navigate('/')
           }
         }
-      }, [dataMutation]);
+      }, [dataMutation, setToken, navigate]);
 
     return (
         <div>
@@ -66,7 +68,7 @@ const Register = () => {
                     />
                 </form>
                 <span>¿Ya tienes una cuenta?</span>
-                <Link to='/auth/login'>
+                <Link to='/login'>
                     <span className='text-blue-700'>Inicia sesión</span>
                 </Link>
             </div>
