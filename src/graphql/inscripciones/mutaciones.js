@@ -7,4 +7,13 @@ const CREAR_INSCRIPCION = gql`
       }
   }
 `;
-export {CREAR_INSCRIPCION};
+
+const APROBAR_INSCRIPCION = gql`
+  mutation AprobarInscripcion($aprobarInscripcionId: String!) {
+    aprobarInscripcion(id: $aprobarInscripcionId) {
+      _id
+    }
+  }
+`;
+
+export { CREAR_INSCRIPCION, APROBAR_INSCRIPCION };
