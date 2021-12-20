@@ -19,6 +19,7 @@ import Register from "components/auth/Register";
 import Login from "components/auth/Login";
 import { AuthContext } from "context/AuthContext";
 import { useState } from "react";
+import PrivateComponent from "components/PrivateComponent";
 //    
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -58,9 +59,11 @@ function App() {
               <Route path='/proyectos' exact>
                 <Proyectos/>
               </Route>
-              <Route path='/inscripciones' exact>
+              <PrivateComponent roleList={"ADMINISTRADOR","LIDER"}>
+                <Route path='/inscripciones' title='Aprobacion Inscripciones' exact>
                 <Inscripciones/>
               </Route>
+              </PrivateComponent>
             </Switch>   
             </PrivateLayout>
           </Route>
