@@ -6,7 +6,6 @@ import jwt_decode from 'jwt-decode';
 
 import HomePage from "./components/home/HomePage";
 
-import NavbarComponent from "./components/shared/NavbarComponent";
 import { setContext } from '@apollo/client/link/context';
 import Usuarios from "./components/usuarios/Usuarios";
 import Proyectos from "components/proyectos/Proyectos";
@@ -17,7 +16,9 @@ import AuthLayout from "layouts/AuthLayout";
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
 import { AuthContext } from "context/AuthContext";
-import { UserContext } from "context/UserContext";
+import PrivateComponent from "components/PrivateComponent";
+
+import {UserContext} from "context/userContext"
 
 const httpLink = createHttpLink({
   // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
@@ -72,8 +73,6 @@ function App() {
 
   return (
     <div className="App">
-
-
       <ApolloProvider client={client}  >
         <AuthContext.Provider value={{ authToken, setAuthToken, setToken }}>
           <UserContext.Provider value={{ userData, setUserData }}>
@@ -86,6 +85,8 @@ function App() {
                     path='/usuarios/editar/:_id'
                     element={<EditarUsuario />}
                   />
+                  <Route path='/proyectos' element={<Proyectos />} />
+                  <Route path='/inscripciones' element={<Inscripciones />} />
                 </Route>
                 <Route path='/auth' element={<AuthLayout />}>
                   <Route path='register' element={<Register />} />
