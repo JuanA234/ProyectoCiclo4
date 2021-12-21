@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from 'context/AuthContext';
 import { NavLink } from 'react-router-dom';
+import PrivateComponent from 'components/PrivateComponent';
 
 
 
@@ -13,13 +14,13 @@ function NavbarComponent() {
     };
     return (
 
-        <button type='button' onClick={() => deleteToken()}>
-          <NavLink to='/auth/login'>
-            <div className='flex flex-col'>
-              <span className="nav-link active" aria-current="page">Cerrar Sesión</span>
-            </div>
-          </NavLink>
-        </button>
+      <button type='button' onClick={() => deleteToken()}>
+        <NavLink to='/auth/login'>
+          <div className='flex flex-col'>
+            <span className="nav-link active" aria-current="page">Cerrar Sesión</span>
+          </div>
+        </NavLink>
+      </button>
     );
   };
   return (
@@ -34,19 +35,20 @@ function NavbarComponent() {
             <li className="nav-item">
               <Link to="/" className="nav-link active" aria-current="page" >Home</Link>
             </li>
-
             <li className="nav-item">
               <Link to="/proyectos" className="nav-link active" aria-current="page" >Gestión Proyectos</Link>
             </li>
-
-            <li className="nav-item">
-              <Link to="/usuarios" className="nav-link active" aria-current="page" >Gestión Usuarios</Link>
-            </li>
-
+            <PrivateComponent roleList={["ADMINISTRADOR"]}>
+              <li className="nav-item">
+                <Link to="/usuarios" className="nav-link active" aria-current="page" >Gestión Usuarios</Link>
+              </li>
+            </PrivateComponent>
+            <PrivateComponent roleList={['ADMINISTRADOR', 'LIDER']}>
             <li className="nav-item">
               <Link to="/inscripciones" className="nav-link active" aria-current="page" >Gestión inscripciones</Link>
             </li>
-            
+            </PrivateComponent>
+
             <li className="nav-item">
               <Logout />
             </li>
