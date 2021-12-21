@@ -28,7 +28,7 @@ jobs:
       run: |
         yarn test --passWithNoTests
       env:
-        CI: true
+        CI: false
       
     - name: yarn build
       run: |
