@@ -22,7 +22,7 @@ jobs:
         run: yarn install
 
       - name: Revision de lint
-        run: yarn lint
+        run: yarn run lint
 
   # This workflow contains a single job called "build"
   build:
