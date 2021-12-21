@@ -48,7 +48,7 @@ jobs:
       run: |
         yarn test --passWithNoTests
       env:
-        CI: false
+        CI: true
       
     - name: yarn build
       run: |
@@ -60,7 +60,7 @@ jobs:
     - name: Deploy to Heroku
       run: |
         git push heroku HEAD:master -f
-        
+
   deploy:
     runs-on: ubuntu-latest
     steps:
