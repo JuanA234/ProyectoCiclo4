@@ -26,4 +26,4 @@ jobs:
     - run: npm run build --if-present
     - name: Deploy to Heroku
       run: |
-        git push heroku HEAD:master -f
+        git push heroku HEAD:main -f
