@@ -16,7 +16,7 @@ import AuthLayout from "layouts/AuthLayout";
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
 import { AuthContext } from "context/AuthContext";
-import PrivateComponent from "components/PrivateComponent";
+//import PrivateComponent from "components/PrivateComponent";
 
 import {UserContext} from "context/userContext"
 
