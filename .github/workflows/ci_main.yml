@@ -1,73 +1,29 @@
-name: CI
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-on: 
+name: CI_CD
+
+on:
   push:
-    branches:    
-      - main 
+    branches: [ main ]
 
 jobs:
-  test:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-
-      # installs dependencies
-      - name: Instalacion de dependencias
-        run: yarn install
-
-      # builds project
-      - name: Pruebas unitarias proyecto
-        run: yarn test
-    needs: [build]
-
   build:
 
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
-        node-version: [16.13.1]
-    
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    
-    - name: yarn install
-      run: |
-        yarn install
-    - name: yarn test
-      run: |
-        yarn test --passWithNoTests
-      env:
-        CI: ' '
-      
-    - name: yarn build
-      run: |
-        yarn run build 
-    
-    - name: Add remote origin
-      run: |
-        git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
-    - name: Deploy to Heroku
-      run: |
-        git push heroku HEAD:master -f
-
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-        with:
-          heroku_api_key: ${{secrets.HEROKU_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_NAME}}
-
-    needs: [test]
+        cache: 'yarn'
+    - run: yarn ci
+    - run: yarn run build --if-present
+    - run: yarn test
