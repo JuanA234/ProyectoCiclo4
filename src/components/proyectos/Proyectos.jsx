@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/react-hooks';
 import { AccordionStyled, AccordionSummaryStyled, AccordionDetailsStyled, } from 'components/shared/Acordeon';
 import { PROYECTOS } from 'graphql/proyectos/queries';
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect } from 'react'
 
 const Proyectos = () => {
 
